@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+
+# Dữ liệu và mô hình do scripts/prepare.py sinh ra (tái tạo được → không đẩy lên Git)
+data/flowers/
+data/coco128/
+data/gallery/
+data/*.tgz
+data/*.zip
+artifacts/**/*.pt
+artifacts/**/*.faiss
+artifacts/classifier/split.json
+/*.pt
+runs/
+datasets/
+
+# Node
+web/node_modules/
+web/dist/
+
+# Khác
+logs/
+cloudflared
+.env
+.DS_Store

@@ -1,0 +1,7 @@
+# Cài đầy đủ để chạy local: backend + Streamlit + huấn luyện (prepare.py) + test
+-r requirements.txt
+-r requirements-streamlit.txt
+scikit-learn
+matplotlib
+pytest
+httpx
