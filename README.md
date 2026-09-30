@@ -153,6 +153,20 @@ Chạy `prepare.py` trước để có `artifacts/` và `data/gallery/`, sau đ�
 docker build -t ai-web-apps . && docker run -p 7860:7860 ai-web-apps   # mở http://localhost:7860
 ```
 
+## Kết quả mô hình (đo một lần trên tập test)
+
+### Ứng dụng 1 — Phân loại 5 món ăn Việt (500 ảnh = 5 lớp × 100)
+
+| Cấu hình | Tập test | Test accuracy | Macro F1 | Ghi chú |
+|---|---|---|---|---|
+| v0 · ResNet-18, 1 epoch, CPU, chia tập chưa phân tầng | 23 ảnh | 0.609 | 0.598 | mốc "trước" — giữ làm bằng chứng cải tiến |
+| v1 · ResNet-18, chia 80/10/10 phân tầng, huấn luyện GPU | 50 ảnh (10/lớp) | — | — | sẽ điền ở bước sau |
+| v2 · MobileNetV3 cùng cách chia + xuất ONNX | 50 ảnh (10/lớp) | — | — | sẽ điền ở bước sau |
+
+Ma trận nhầm lẫn bản v0:
+
+![Ma trận nhầm lẫn v0](artifacts/classifier/confusion_matrix.png)
+
 ## Công cụ AI đã sử dụng
 
 Theo yêu cầu của giảng viên, nhóm ghi rõ công cụ AI và phiên bản:
