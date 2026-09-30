@@ -1,25 +1,26 @@
 # AI Web Apps — 4 ứng dụng AI trên một trang web
 
-Bài tập nhóm học phần **Lập trình Web nâng cao (N05)**. Một backend **FastAPI** giữ 4 mô hình AI; hai giao diện web cùng gọi vào backend đó: **React** (một trang, 4 tab) và **Streamlit**.
+Bài tập môn học phần Lập trình Web nâng cao (N05). Một backend FastAPI giữ 4 mô hình AI; hai giao diện web cùng gọi vào backend đó: React (một trang, 4 tab) và Streamlit.
 
 | Thành viên | MSSV | Phụ trách |
 |---|---|---|
-| _(điền)_ | _(điền)_ | _(điền)_ |
+| (điền) | (điền) | (điền) |
+| (điền) | (điền) | (điền) |
 
 ## Liên kết sản phẩm
 
 | Mục | Link |
 |---|---|
-| Giao diện web (React, Vercel/Netlify) | _(điền sau khi triển khai — xem [DEPLOY.md](DEPLOY.md))_ |
-| Backend API (Hugging Face Spaces) | _(điền)_ · kiểm tra `/api/health` · tài liệu `/docs` |
-| Giao diện Streamlit (tùy chọn) | _(điền)_ |
-| Model card | [MODEL_CARD.md](MODEL_CARD.md) |
+| Giao diện web (React, Vercel/Netlify) | (điền sau khi triển khai — xem `DEPLOY.md`) |
+| Backend API (Hugging Face Spaces) | (điền — kiểm tra `/api/health` · tài liệu `/docs`) · tạm thời: ngrok `https://reapply-frozen-lumpish.ngrok-free.dev` (chạy trên laptop, sẽ thay ở bước C2) |
+| Giao diện Streamlit (tùy chọn) | https://ai-web-apps-ikyzmf6457wawwke9a6qmi.streamlit.app |
+| Model card | `MODEL_CARD.md` |
 
 ## 4 chức năng AI
 
 | # | Chức năng | Mô hình | Dữ liệu | Chỉ số đánh giá |
 |---|---|---|---|---|
-| 1 | Nhận diện loài hoa (5 lớp) + **giải thích Grad-CAM** | ResNet-18 fine-tune | TF Flowers — 3.670 ảnh | Accuracy, F1, ma trận nhầm lẫn |
+| 1 | Nhận diện hình ảnh (5 lớp món ăn Việt) + giải thích Grad-CAM | ResNet-18 fine-tune | 628 ảnh món ăn Việt tự thu thập (≥ 100 ảnh/lớp) | Accuracy, F1, ma trận nhầm lẫn |
 | 2 | Phát hiện đối tượng (80 lớp COCO) | YOLO11n | COCO128 | mAP50, mAP50-95 |
 | 3 | Tìm kiếm ảnh (chữ → ảnh, ảnh → ảnh) | CLIP ViT-B/32 + FAISS | COCO128 + 500 ảnh hoa | Precision@5, Precision@10 |
 | 4 | Chatbot chăm sóc khách hàng (RAG) | Qwen2.5-Instruct + MiniLM đa ngôn ngữ + FAISS | 6 tài liệu chính sách ShopLite (tiếng Việt) | Hit@1, Hit@3 |
@@ -27,91 +28,82 @@ Bài tập nhóm học phần **Lập trình Web nâng cao (N05)**. Một backen
 ## Kiến trúc
 
 ```
-                ┌──────────────── Streamlit (cổng 8501) ─────────────┐
- Trình duyệt ──►│                                                     │──► FastAPI (cổng 8000) ──► core/ (4 mô hình, nạp 1 lần)
-                └──────────── React build (phục vụ bởi FastAPI) ─────┘         /api/classify · /api/detect
-                                                                                /api/search/* · /api/chat (SSE)
+                       ┌────────────── Streamlit (cổng 8501) ──────────────┐
+Trình duyệt ──────────►│                                                  ├──► FastAPI (cổng 8000) ──► core/
+                       └────────── React build (phục vụ bởi FastAPI) ─────┘    /api/classify · /api/detect
+                                                                               /api/search/* · /api/chat
 ```
 
 `core/` chỉ chứa suy luận (không biết gì về web) → `api/` bọc thành HTTP → `streamlit_app.py` và `web/` chỉ là giao diện.
 
 ```
 ├── config.py               # cấu hình tập trung, ghi đè bằng biến môi trường
-├── core/                   # classifier.py · detector.py · retrieval.py · llm.py
+├── core/                   # classifier.py · detector.py · retrieval.py · llm.py · gradcam.py
 ├── api/main.py             # FastAPI (và phục vụ web/dist nếu đã build)
 ├── streamlit_app.py        # giao diện Streamlit
 ├── web/                    # giao diện React (Vite)
-├── data/kb/                # kho tri thức cho chatbot (6 file Markdown)
-├── scripts/prepare.py      # tải dữ liệu, huấn luyện, lập chỉ mục, đo chỉ số
-├── scripts/smoke_test.py   # kiểm thử toàn bộ API đang chạy
-├── scripts/benchmark.py    # đo độ trễ p50/p95 + RAM (locustfile.py: phương án dùng Locust)
-├── scripts/fill_docs.py    # điền số đo thật vào README / MODEL_CARD
+├── data/kb/                # kho tri thức chatbot (6 file Markdown)
+├── train.py                # huấn luyện App 1 (v1 ResNet-18, v2 MobileNetV3) → out_v1/
+├── tai_anh.py              # tải bù dữ liệu món ăn Việt (Bing + DuckDuckGo, tự dọn ảnh trùng/hỏng)
+├── build_search.py         # build lại chỉ mục FAISS cho tìm kiếm ảnh
+├── out_v1/                 # bằng chứng so sánh v1/v2: metrics, ONNX, ma trận nhầm lẫn
+├── scripts/                # prepare.py · smoke_test.py · benchmark.py · fill_docs.py
 ├── tests/test_api.py       # pytest, không cần GPU / mô hình thật (chạy trong CI)
 ├── MODEL_CARD.md           # model card: dữ liệu, chỉ số, giới hạn, rủi ro
 ├── DEPLOY.md               # hướng dẫn triển khai HF Spaces / Vercel / Streamlit Cloud
-└── docs/screenshots/       # ảnh giao diện trong README
+└── docs/screenshots/       # ảnh giao diện nhúng trong README
 ```
 
 ## Grad-CAM — giải thích dự đoán trên web
 
-Ở tab **Phân loại ảnh** (React và Streamlit) tick **“Giải thích bằng Grad-CAM”** để xem mô hình nhìn vào đâu: vùng **đỏ/vàng** là vùng ảnh ảnh hưởng nhiều nhất đến nhãn được giải thích (mặc định là nhãn có xác suất cao nhất; API cho chọn nhãn khác qua tham số `target`).
+Ở tab Phân loại ảnh (React và Streamlit) tick "Giải thích bằng Grad-CAM" để xem mô hình nhìn vào đâu: vùng đỏ/vàng là vùng ảnh hưởng mạnh nhất đến nhãn được giải thích (mặc định là nhãn có xác suất cao nhất; API cho chọn nhãn khác qua tham số `target`).
 
-- Cài đặt: `core/gradcam.py`, lấy đạo hàm của điểm số lớp theo bản đồ đặc trưng `layer4` (7×7) của ResNet-18, trung bình theo không gian làm trọng số kênh, ReLU, phóng lên và phủ lên ảnh. Không huấn luyện thêm.
-- Ảnh hiển thị là phần **cắt giữa 224×224** vì mô hình chỉ nhìn phần đó.
-- Cách đọc đúng: bản đồ cho biết mô hình **dựa vào đâu**, không chứng minh dự đoán **đúng**. Với ảnh ngoài 5 loài, bản đồ vẫn tô sáng một vùng nào đó — xem thêm [MODEL_CARD.md](MODEL_CARD.md).
+- Cài đặt: `core/gradcam.py` lấy đạo hàm của điểm số lớp theo bản đồ đặc trưng `layer4` (7×7) của ResNet-18, trung bình theo không gian làm trọng số kênh, ReLU, phóng lên khổ ảnh. Không huấn luyện thêm.
+- Ảnh hiển thị là phần cắt giữa 224×224 mà mô hình nhìn nhận.
+- Cách đọc đúng: bản đồ cho biết mô hình dựa vào đâu, không khẳng định dự đoán đúng. Với ảnh ngoài 5 lớp, bản đồ vẫn sáng vùng nào đó — xem thêm `MODEL_CARD.md`.
 
 ## Cài đặt và chạy
 
-Cần **Python 3.11+** và **Node 22** (Vite 8 yêu cầu Node ≥ 20.19). Lần đầu tải khoảng 2–4 GB (dữ liệu + trọng số mô hình).
+Cần Python 3.11+ và Node 22 (Vite 8 yêu cầu Node ≥ 20.19). Lần đầu tải khoảng 2–4 GB (dữ liệu + trọng số mô hình).
 
 ```bash
 python -m venv .venv
-.venv\Scripts\activate              # Windows  (macOS/Linux: source .venv/bin/activate)
+.venv\Scripts\activate              # Windows   (macOS/Linux: source .venv/bin/activate)
 pip install -r requirements-dev.txt
 
 python scripts/prepare.py           # chạy 1 lần: tải dữ liệu, huấn luyện ResNet-18, lập chỉ mục, đo chỉ số
 
 cd web && npm install && npm run build && cd ..
 uvicorn api.main:app --port 8000    # React + API → http://localhost:8000   (Swagger: /docs)
-streamlit run streamlit_app.py      # Streamlit   → http://localhost:8501   (mở terminal khác)
+streamlit run streamlit_app.py      # Streamlit → http://localhost:8501      (mở terminal khác)
 ```
 
 - Chờ log `Application startup complete` (nạp 4 mô hình mất từ vài chục giây đến vài phút), rồi kiểm tra `http://localhost:8000/api/health` trả `ok`.
 - Không có GPU: `prepare.py` tự chuyển sang chế độ nhẹ (1 epoch, 800 ảnh, LLM 0.5B). Máy yếu hoặc mạng chậm: chạy `prepare.py` trên Google Colab rồi tải thư mục `artifacts/` và `data/gallery/` về đặt vào dự án.
 - Phát triển React: `cd web && npm run dev` (cổng 5173, proxy `/api` → 8000).
-- Kiểm thử: `python -m pytest -q` (38 ca, API với mô hình giả, không cần GPU — mỗi endpoint có ca thành công, ca 400 và ca 422; kèm 9 ca kiểm tra lõi Grad-CAM; tự chạy trên GitHub Actions mỗi lần push) và `python scripts/smoke_test.py` (API thật đang chạy).
+- Kiểm thử: `python -m pytest -q` (không cần GPU — tự chạy trong GitHub Actions mỗi lần push) và `python scripts/smoke_test.py` (cần API thật đang chạy).
 
 ## Ảnh giao diện
 
-<!-- Chụp ảnh từ giao diện đang chạy, lưu vào docs/screenshots/ với đúng tên file bên dưới -->
+### React — một trang web, 4 chức năng
+![Phân loại ảnh](docs/screenshots/react_classify.png) ![Phát hiện đối tượng](docs/screenshots/react_detect.png)
+![Tìm kiếm ảnh](docs/screenshots/react_search.png) ![Chatbot RAG](docs/screenshots/react_chat.png)
 
-**React — một trang web, 4 chức năng**
-
-<p>
-  <img src="docs/screenshots/react-classify.png" width="49%" alt="Phân loại ảnh">
-  <img src="docs/screenshots/react-detect.png" width="49%" alt="Phát hiện đối tượng">
-</p>
-<p>
-  <img src="docs/screenshots/react-search.png" width="49%" alt="Tìm kiếm ảnh">
-  <img src="docs/screenshots/react-chat.png" width="49%" alt="Chatbot RAG">
-</p>
-
-**Streamlit**
-
-<img src="docs/screenshots/streamlit.png" width="70%" alt="Giao diện Streamlit">
+### Streamlit
+![Giao diện Streamlit](docs/screenshots/streamlit_overview.png)
 
 ## API
 
 | Method | Endpoint | Đầu vào | Đầu ra |
 |---|---|---|---|
-| GET | `/api/health` | — | trạng thái, thiết bị, mô hình nào đã nạp |
+| GET | `/api/health` | — | trạng thái thiết bị, mô hình nào đã nạp |
 | POST | `/api/classify` | `file` (ảnh), `top_k` | `predictions`, `confident`, `latency_ms` |
 | POST | `/api/classify/explain` | `file`, `top_k`, `target` (tùy chọn, tên lớp) | như `/api/classify` + `target`, `overlay` (ảnh JPEG base64 có bản đồ nhiệt Grad-CAM) |
 | POST | `/api/detect` | `file`, `conf` | `detections`, `summary`, `image` (base64 đã vẽ hộp) |
 | POST | `/api/search/text` | JSON `{query, k}` | `results` [{id, label, score, url}] |
 | POST | `/api/search/image` | `file`, `k` | như trên |
 | GET | `/api/gallery/{id}` | — | file ảnh trong kho |
-| POST | `/api/chat` | JSON `{message, history}` | Server-Sent Events: `sources` → `token`… → `done` |
+| POST | `/api/chat` | JSON `{message, history}` | Server-Sent Events: `sources` → `token` … → `done` |
 | POST | `/api/chat/sync` | như trên | `{answer, sources}` (không stream) |
 
 ## Biến môi trường
@@ -127,23 +119,15 @@ streamlit run streamlit_app.py      # Streamlit   → http://localhost:8501   (m
 
 ## Chỉ số mô hình
 
-Số đo thật do `prepare.py` ghi vào `artifacts/*/metrics.json` và `artifacts/rag_metrics.json`; chạy `python scripts/fill_docs.py` để bảng dưới tự cập nhật (đừng sửa tay giữa hai thẻ).
+Số đo đặt tại `artifacts/classifier/metrics.json` (bản v0), `out_v1/compare_metrics.json` (v1/v2), `artifacts/detector/metrics.json`, `artifacts/retrieval/metrics.json` và `artifacts/rag_metrics.json`.
 
-<!-- METRICS:START -->
-_chưa có — chạy `python scripts/prepare.py` rồi `python scripts/fill_docs.py`_
-<!-- METRICS:END -->
-
-Ma trận nhầm lẫn của bộ phân loại: `artifacts/classifier/confusion_matrix.png`. Giới hạn và rủi ro: xem [MODEL_CARD.md](MODEL_CARD.md).
+Ma trận nhầm lẫn bản phân loại: `artifacts/classifier/confusion_matrix_v0.png`, `out_v1/cm_v1.png`, `out_v1/cm_v2.png`. Giới hạn và rủi ro: xem `MODEL_CARD.md`.
 
 ## Đo hiệu năng
 
-Đo bằng `python scripts/benchmark.py --api <link backend>` (tuần tự, 1 người dùng, sau 3 lần khởi động), rồi `python scripts/fill_docs.py`.
+Chưa đo — bước C5 sẽ chạy `python scripts/benchmark.py --api <link backend>` (locust: tuần tự 1 người dùng, sau 3 lần khởi động) hoặc `hey`, rồi điền p50/p95 + RAM vào đây.
 
-<!-- BENCH:START -->
-_chưa đo — chạy `python scripts/benchmark.py` rồi `python scripts/fill_docs.py`_
-<!-- BENCH:END -->
-
-**Phần cứng của backend:** _(điền: CPU/GPU, RAM, nơi chạy — ví dụ "HF Spaces CPU basic, 2 vCPU, 16 GB")_
+Phần cứng của backend: (điền — ví dụ "HF Spaces CPU basic, 2 vCPU, 16 GB" hoặc "laptop Windows, CPU …, RAM … GB").
 
 ## Docker (tùy chọn)
 
@@ -155,17 +139,25 @@ docker build -t ai-web-apps . && docker run -p 7860:7860 ai-web-apps   # mở ht
 
 ## Kết quả mô hình (đo một lần trên tập test)
 
-### Ứng dụng 1 — Phân loại 5 món ăn Việt (500 ảnh = 5 lớp × 100)
+### Ứng dụng 1 — Phân loại 5 món ăn Việt (628 ảnh = 5 lớp, ≥ 100 ảnh/lớp, seed 42)
 
 | Cấu hình | Tập test | Test accuracy | Macro F1 | Ghi chú |
 |---|---|---|---|---|
-| v0 · ResNet-18, 1 epoch, CPU, chia tập chưa phân tầng | 23 ảnh | 0.609 | 0.598 | mốc "trước" — giữ làm bằng chứng cải tiến |
-| v1 · ResNet-18, chia 80/10/10 phân tầng, huấn luyện GPU | 50 ảnh (10/lớp) | — | — | sẽ điền ở bước sau |
-| v2 · MobileNetV3 cùng cách chia + xuất ONNX | 50 ảnh (10/lớp) | — | — | sẽ điền ở bước sau |
+| v0 · ResNet-18, 5 epoch, CPU, dữ liệu 225 ảnh (chưa đủ ≥100/lớp) | 23 ảnh | 0.609 | 0.598 | mốc "trước" — giữ làm bằng chứng cải tiến |
+| v1 · ResNet-18, 6 epoch, chia 80/10/10 phân tầng | 62 ảnh | 0.8065 | 0.8034 | checkpoint chính đang deploy · ONNX 9.5 ms · 44.9 MB |
+| v2 · MobileNetV3-Small, cùng cách chia + xuất ONNX | 62 ảnh | 0.8065 | 0.8088 | ONNX 1.1 ms · 6.4 MB — ứng cử viên cho edge |
 
 Ma trận nhầm lẫn bản v0:
 
-![Ma trận nhầm lẫn v0](artifacts/classifier/confusion_matrix.png)
+![Ma trận nhầm lẫn v0](artifacts/classifier/confusion_matrix_v0.png)
+
+Ma trận nhầm lẫn bản v1:
+
+![Ma trận nhầm lẫn v1](out_v1/cm_v1.png)
+
+Ma trận nhầm lẫn bản v2:
+
+![Ma trận nhầm lẫn v2](out_v1/cm_v2.png)
 
 ## Công cụ AI đã sử dụng
 
@@ -173,6 +165,7 @@ Theo yêu cầu của giảng viên, nhóm ghi rõ công cụ AI và phiên bả
 
 | Công cụ | Phiên bản | Dùng để làm gì |
 |---|---|---|
-| Claude (Anthropic) | Claude Sonnet 5.5 | Tách notebook của giảng viên thành cấu trúc repo; viết `core/gradcam.py` và endpoint `/api/classify/explain`, `scripts/prepare.py`, `smoke_test.py`, `benchmark.py`, `locustfile.py`, `fill_docs.py`, bộ test `tests/test_api.py`, CI, `MODEL_CARD.md`, `DEPLOY.md`, README |
+| Claude (Anthropic) | Claude Sonnet 5.5 | Tách notebook của giảng viên thành cấu trúc repo: viết `core/gradcam.py` và endpoint `/api/classify/explain`, `scripts/prepare.py`, `smoke_test.py`, `benchmark.py`, `fill_docs.py`, bổ trợ `tests/test_api.py`, CI, `MODEL_CARD.md`, `DEPLOY.md`, README |
+| Qwen (Alibaba) | Qwen3.8 | Coaching từng bước: chẩn đoán lỗi triển khai (Streamlit Cloud, ngrok, Git LFS), viết `train.py`, `tai_anh.py`, bảng so sánh v1/v2, soạn lại README |
 
-Các file `config.py`, `core/`, `api/main.py`, `streamlit_app.py`, `web/`, `tests/` và `data/kb/` được trích nguyên văn từ notebook `AI_Web_Apps_Streamlit_React.ipynb` do giảng viên cung cấp (Phenikaa Applied AI Lab). Dữ liệu: TF Flowers, COCO128. Mô hình: ResNet-18 (torchvision), YOLO11n (Ultralytics), CLIP (OpenAI), MiniLM (sentence-transformers), Qwen2.5 (Alibaba) qua Hugging Face.
+Các file `config.py`, `core/`, `api/main.py`, `streamlit_app.py`, `web/`, `tests/` và `data/kb/` được trích nguyên bản từ notebook `AI_Web_Apps_Streamlit_React.ipynb` do giảng viên cung cấp (Phenikaa Applied AI Lab). Dữ liệu: món ăn Việt tự thu thập (Bing/DuckDuckGo + tải tay), COCO128, TF Flowers (kho ảnh tìm kiếm). Mô hình nền: ResNet-18, MobileNetV3 (torchvision), YOLO11n (Ultralytics), CLIP (OpenAI), MiniLM (sentence-transformers), Qwen2.5 (Alibaba) qua Hugging Face.
