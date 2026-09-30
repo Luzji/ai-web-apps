@@ -64,7 +64,7 @@ tab1, tab2, tab3, tab4 = st.tabs(["🌼 Phân loại", "🚗 Phát hiện", "�
 with tab1:
     c1, c2 = st.columns(2)
     with c1:
-        f = upload("Ảnh một bông hoa (daisy, dandelion, roses, sunflowers, tulips)", "cls")
+        f = upload("Ảnh món ăn Việt Nam (Phở bò, Bánh mì, Bún chả, Gỏi cuốn, Bánh xèo))", "cls")
         top_k = st.slider("Top-k", 1, 5, 3)
         explain = st.checkbox("Giải thích bằng Grad-CAM (vùng mô hình chú ý)")
     endpoint = "/api/classify/explain" if explain else "/api/classify"
