@@ -1,3 +1,4 @@
+
 """Giao diện Streamlit — client mỏng gọi FastAPI (mô hình chỉ nạp một lần ở backend)."""
 import base64
 import io
@@ -7,6 +8,17 @@ import os
 import requests
 import streamlit as st
 from PIL import Image
+import subprocess
+import sys
+import time
+import urllib.request
+
+# Tự động bật FastAPI backend ngầm nếu chưa chạy
+try:
+    urllib.request.urlopen("http://127.0.0.1:8000/api/health", timeout=1)
+except Exception:
+    subprocess.Popen([sys.executable, "-m", "uvicorn", "api.main:app", "--host", "127.0.0.1", "--port", "8000"])
+    time.sleep(5)  # Đợi backend nạp mô hình và khởi động
 
 st.set_page_config(page_title="AI Web Apps", page_icon="🤖", layout="wide")
 API_URL = st.sidebar.text_input("API URL", os.environ.get("API_URL", "http://localhost:8000")).rstrip("/")
