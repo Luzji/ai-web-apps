@@ -122,7 +122,15 @@ streamlit run streamlit_app.py      # Streamlit → http://localhost:8501      (
 Số đo đặt tại `artifacts/classifier/metrics.json` (bản v0), `out_v1/compare_metrics.json` (v1/v2), `artifacts/detector/metrics.json`, `artifacts/retrieval/metrics.json` và `artifacts/rag_metrics.json`.
 
 Ma trận nhầm lẫn bản phân loại: `artifacts/classifier/confusion_matrix_v0.png`, `out_v1/cm_v1.png`, `out_v1/cm_v2.png`. Giới hạn và rủi ro: xem `MODEL_CARD.md`.
+### Ứng dụng 2 — Phát hiện đối tượng (Mũ bảo hiểm)
 
+| Cấu hình | Tập dữ liệu | mAP50 | Precision | Recall | Ghi chú |
+|---|---|---|---|---|---|
+| YOLO11n (pretrained COCO) | COCO128 | ~0.80+ | - | - | Baseline mặc định |
+| YOLO11n (fine-tune 20 epochs) | Roboflow Helmet (1368 train / 90 test) | **0.797** | 0.833 | 0.727 | Đạt ~95% hiệu suất baseline Roboflow (83.8%) |
+
+File kết quả chi tiết: `artifacts/detector/helmet_metrics.json`  
+Biểu đồ huấn luyện và ma trận nhầm lẫn: `artifacts/detector/runs/helmet_yolo11n/`
 ## Đo hiệu năng
 
 Chưa đo — bước C5 sẽ chạy `python scripts/benchmark.py --api <link backend>` (locust: tuần tự 1 người dùng, sau 3 lần khởi động) hoặc `hey`, rồi điền p50/p95 + RAM vào đây.
