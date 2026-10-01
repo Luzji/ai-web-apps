@@ -17,6 +17,23 @@ Bài tập môn học phần Lập trình Web nâng cao (N05). Một backend Fas
 | Giao diện Streamlit (tùy chọn) | https://ai-web-apps-tenqchajle4ipxjyhzgukr.streamlit.app/ |
 | Model card | `MODEL_CARD.md` |
 
+
+
+   ## Video demo
+   xem tất cả trong folder: [Google Drive](https://drive.google.com/drive/folders/1Y546lEZmJQnrgY4xHGL2CEGeR-XwH6Kk?usp=drive_link)
+## Hướng dẫn chạy local (để test đầy đủ)
+
+Do tính năng Webcam yêu cầu camera thật và backend chạy trên máy, làm theo các bước sau để test đầy đủ:
+
+1. **Cài đặt:**
+   ```bash
+   git clone https://github.com/Luzji/ai-web-apps.git
+   cd ai-web-apps
+   python -m venv .venv && .venv\Scripts\activate
+   pip install -r requirements.txt
+   cd web && npm install && cd ..
+
+
 ## 4 chức năng AI
 
 | # | Chức năng | Mô hình | Dữ liệu | Chỉ số đánh giá |
