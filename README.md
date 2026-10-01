@@ -11,7 +11,7 @@ Bài tập môn học phần Lập trình Web nâng cao (N05). Một backend Fas
 
 | Mục | Link |
 |---|---|
-| Giao diện web (React, Vercel/Netlify) | https://ai-web-apps.vercel.app/ |
+| | Giao diện web (React, Vercel) | https://ai-web-apps-web.vercel.app (demo giao diện — để test đầy đủ cần chạy backend local/ngrok) | |
 | Backend API | https://reapply-frozen-lumpish.ngrok-free.dev . tài liệu `/docs` · kiểm tra `/api/health` (chạy trên laptop qua ngrok) |
 | Giao diện Streamlit (tùy chọn) | https://ai-web-apps-tenqchajle4ipxjyhzgukr.streamlit.app/ |
 | Model card | `MODEL_CARD.md` |
