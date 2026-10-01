@@ -21,8 +21,8 @@ export default function Classify() {
   return (
     <section className="grid">
       <div>
-        <h2>Phân loại hoa</h2>
-        <p className="muted">ResNet-18 fine-tune trên 5 loài: daisy, dandelion, roses, sunflowers, tulips.</p>
+        <h2>Phân loại món ăn Việt</h2>
+        <p className="muted">ResNet-18 fine-tune trên 5 món: phở, bún bò Huế, cơm tấm, bánh mì, hủ tiếu.</p>
         <ImagePicker onChange={setFile} />
         <label className="check">
           <input type="checkbox" checked={explain} onChange={(e) => setExplain(e.target.checked)} />
