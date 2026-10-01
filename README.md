@@ -191,4 +191,5 @@ Theo yêu cầu của giảng viên, nhóm ghi rõ công cụ AI và phiên bả
 |---|---|---|
 | Claude (Anthropic) | Claude Sonnet 5.5 | 
 | Qwen (Alibaba) | Qwen3.8 | 
+|---|---|---|
 Các file `config.py`, `core/`, `api/main.py`, `streamlit_app.py`, `web/`, `tests/` và `data/kb/` được trích nguyên bản từ notebook `AI_Web_Apps_Streamlit_React.ipynb` do giảng viên cung cấp (Phenikaa Applied AI Lab). Dữ liệu: món ăn Việt tự thu thập (Bing/DuckDuckGo + tải tay), COCO128, TF Flowers (kho ảnh tìm kiếm). Mô hình nền: ResNet-18, MobileNetV3 (torchvision), YOLO11n (Ultralytics), CLIP (OpenAI), MiniLM (sentence-transformers), Qwen2.5 (Alibaba) qua Hugging Face.
