@@ -28,6 +28,9 @@ Do tính năng Webcam yêu cầu camera thật và backend chạy trên máy, l�
    python -m venv .venv && .venv\Scripts\activate
    pip install -r requirements.txt
    cd web && npm install && cd ..
+
+   ## Video demo
+   xem tất cả trong folder: [Google Drive](https://drive.google.com/drive/folders/1Y546lEZmJQnrgY4xHGL2CEGeR-XwH6Kk?usp=drive_link)
 ## 4 chức năng AI
 
 | # | Chức năng | Mô hình | Dữ liệu | Chỉ số đánh giá |
