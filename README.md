@@ -187,9 +187,8 @@ Biểu đồ huấn luyện: `artifacts/detector/runs/helmet_yolo11n/`
 
 Theo yêu cầu của giảng viên, nhóm ghi rõ công cụ AI và phiên bản:
 
-| Công cụ | Phiên bản | Dùng để làm gì |
+| Công cụ | Phiên bản | 
 |---|---|---|
-| Claude (Anthropic) | Claude Sonnet 5.5 | Tách notebook của giảng viên thành cấu trúc repo: viết `core/gradcam.py` và endpoint `/api/classify/explain`, `scripts/prepare.py`, `smoke_test.py`, `benchmark.py`, `fill_docs.py`, bổ trợ `tests/test_api.py`, CI, `MODEL_CARD.md`, `DEPLOY.md`, README |
-| Qwen (Alibaba) | Qwen3.8 | Coaching từng bước: chẩn đoán lỗi triển khai (Streamlit Cloud, ngrok, Git LFS), viết `train.py`, `tai_anh.py`, bảng so sánh v1/v2, soạn lại README |
-
+| Claude (Anthropic) | Claude Sonnet 5.5 | 
+| Qwen (Alibaba) | Qwen3.8 | 
 Các file `config.py`, `core/`, `api/main.py`, `streamlit_app.py`, `web/`, `tests/` và `data/kb/` được trích nguyên bản từ notebook `AI_Web_Apps_Streamlit_React.ipynb` do giảng viên cung cấp (Phenikaa Applied AI Lab). Dữ liệu: món ăn Việt tự thu thập (Bing/DuckDuckGo + tải tay), COCO128, TF Flowers (kho ảnh tìm kiếm). Mô hình nền: ResNet-18, MobileNetV3 (torchvision), YOLO11n (Ultralytics), CLIP (OpenAI), MiniLM (sentence-transformers), Qwen2.5 (Alibaba) qua Hugging Face.
