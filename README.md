@@ -17,6 +17,10 @@ Bài tập môn học phần Lập trình Web nâng cao (N05). Một backend Fas
 | Giao diện Streamlit (tùy chọn) | https://ai-web-apps-tenqchajle4ipxjyhzgukr.streamlit.app/ |
 | Model card | `MODEL_CARD.md` |
 
+### Backend API (ngrok)
+
+🔗 Swagger UI: https://reapply-frozen-lumpish.ngrok-free.dev/docs
+
 
 
    ## Video demo
