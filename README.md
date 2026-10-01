@@ -11,6 +11,7 @@ Bài tập môn học phần Lập trình Web nâng cao (N05). Một backend Fas
 
 | Mục | Link |
 |---|---|
+| GitHub (tag v1.0) | https://github.com/Luzji/ai-web-apps/releases/tag/v1.0 |
 | Giao diện web (React, Vercel) | https://ai-web-apps.vercel.app/ (demo giao diện — để test đầy đủ cần chạy backend local/ngrok) |
 | Backend API (ngrok, chạy trên laptop) | https://reapply-frozen-lumpish.ngrok-free.dev · tài liệu `/docs` · kiểm tra `/api/health` |
 | Giao diện Streamlit (tùy chọn) | https://ai-web-apps-tenqchajle4ipxjyhzgukr.streamlit.app/ |
