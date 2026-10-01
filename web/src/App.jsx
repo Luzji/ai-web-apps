@@ -1,15 +1,19 @@
+
 import { useEffect, useState } from 'react';
 import { getHealth } from './api.js';
 import Classify from './features/Classify.jsx';
 import Detect from './features/Detect.jsx';
 import Search from './features/Search.jsx';
 import Chat from './features/Chat.jsx';
+import HelmetDetect from './features/HelmetDetect.jsx';
+
 
 const TABS = [
   { id: 'classify', label: 'Phân loại ảnh', model: 'classifier', Component: Classify },
   { id: 'detect', label: 'Phát hiện đối tượng', model: 'detector', Component: Detect },
   { id: 'search', label: 'Tìm kiếm ảnh', model: 'retrieval', Component: Search },
   { id: 'chat', label: 'Chatbot RAG', model: 'llm', Component: Chat },
+    { id: 'helmet', label: '🪖 Mũ bảo hiểm (Webcam)', model: 'detector', Component: HelmetDetect },
 ];
 
 export default function App() {
