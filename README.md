@@ -21,7 +21,7 @@ Bài tập môn học phần Lập trình Web nâng cao (N05). Một backend Fas
 | # | Chức năng | Mô hình | Dữ liệu | Chỉ số đánh giá |
 |---|---|---|---|---|
 | 1 | Nhận diện hình ảnh (5 lớp món ăn Việt) + giải thích Grad-CAM | ResNet-18 fine-tune | 628 ảnh món ăn Việt tự thu thập (≥ 100 ảnh/lớp) | Accuracy, F1, ma trận nhầm lẫn |
-| 2 | Phát hiện đối tượng (80 lớp COCO) | YOLO11n | COCO128 | mAP50, mAP50-95 |
+| 2 | Phát hiện đối tượng (80 lớp COCO + mũ bảo hiểm VN) | YOLO11n fine-tune | COCO128 + 1.368 ảnh mũ bảo hiểm (Roboflow, CC BY 4.0) | mAP50 0.797 · Webcam real-time ~5 FPS |
 | 3 | Tìm kiếm ảnh (chữ → ảnh, ảnh → ảnh) | CLIP ViT-B/32 + FAISS | COCO128 + 500 ảnh hoa | Precision@5, Precision@10 |
 | 4 | Chatbot chăm sóc khách hàng (RAG) | Qwen2.5-Instruct + MiniLM đa ngôn ngữ + FAISS | 6 tài liệu chính sách ShopLite (tiếng Việt) | Hit@1, Hit@3 |
 
