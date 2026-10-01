@@ -2,10 +2,10 @@
 
 Bài tập môn học phần Lập trình Web nâng cao (N05). Một backend FastAPI giữ 4 mô hình AI; hai giao diện web cùng gọi vào backend đó: React (một trang, 4 tab) và Streamlit.
 
-| Thành viên | MSSV | Phụ trách |
-|---|---|---|
-| (điền) | (điền) | (điền) |
-| (điền) | (điền) | (điền) |
+| Thành viên | MSSV |
+|---|---|
+| (điền) | (điền) | 
+| (điền) | (điền) | 
 
 ## Liên kết sản phẩm
 
