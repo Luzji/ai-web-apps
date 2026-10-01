@@ -11,9 +11,9 @@ Bài tập môn học phần Lập trình Web nâng cao (N05). Một backend Fas
 
 | Mục | Link |
 |---|---|
-| Giao diện web (React, Vercel/Netlify) | (điền sau khi triển khai — xem `DEPLOY.md`) |
-| Backend API (Hugging Face Spaces) | `https://reapply-frozen-lumpish.ngrok-free.dev` · tài liệu `/docs` · kiểm tra `/api/health` (chạy trên laptop qua ngrok, sẽ thay ở bước C2) |
-| Giao diện Streamlit (tùy chọn) | `https://ai-web-apps-tenqchajle4ipxjyh zgukr.streamlit.app` |
+| Giao diện web (React, Vercel/Netlify) | https://ai-web-apps.vercel.app/ |
+| Backend API | https://reapply-frozen-lumpish.ngrok-free.dev . tài liệu `/docs` · kiểm tra `/api/health` (chạy trên laptop qua ngrok) |
+| Giao diện Streamlit (tùy chọn) | https://ai-web-apps-tenqchajle4ipxjyhzgukr.streamlit.app/ |
 | Model card | `MODEL_CARD.md` |
 
 ## 4 chức năng AI
