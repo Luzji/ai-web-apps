@@ -124,13 +124,48 @@ Số đo đặt tại `artifacts/classifier/metrics.json` (bản v0), `out_v1/co
 Ma trận nhầm lẫn bản phân loại: `artifacts/classifier/confusion_matrix_v0.png`, `out_v1/cm_v1.png`, `out_v1/cm_v2.png`. Giới hạn và rủi ro: xem `MODEL_CARD.md`.
 ### Ứng dụng 2 — Phát hiện đối tượng (Mũ bảo hiểm)
 
-| Cấu hình | Tập dữ liệu | mAP50 | Precision | Recall | Ghi chú |
-|---|---|---|---|---|---|
-| YOLO11n (pretrained COCO) | COCO128 | ~0.80+ | - | - | Baseline mặc định |
-| YOLO11n (fine-tune 20 epochs) | Roboflow Helmet (1368 train / 90 test) | **0.797** | 0.833 | 0.727 | Đạt ~95% hiệu suất baseline Roboflow (83.8%) |
+**Baseline:** YOLO11n pretrained trên COCO (80 lớp: người, xe, động vật…).
 
-File kết quả chi tiết: `artifacts/detector/helmet_metrics.json`  
-Biểu đồ huấn luyện và ma trận nhầm lẫn: `artifacts/detector/runs/helmet_yolo11n/`
+**Fine-tune:** huấn luyện 20 epochs trên bộ dữ liệu mũ bảo hiểm (1.368 ảnh train, 90 ảnh test, 2 lớp: With Helmet / Without Helmet, Roboflow Universe, CC BY 4.0).
+
+| Cấu hình | Tập test | mAP50 | mAP50-95 | Precision | Recall | Ghi chú |
+|---|---|---|---|---|---|---|
+| YOLO11n (COCO, 80 lớp) | COCO128 | ~0.80+ | — | — | — | Baseline mặc định |
+| YOLO11n fine-tune 20 epochs | 90 ảnh | **0.797** | 0.452 | 0.833 | 0.727 | Đạt ~95% hiệu suất baseline Roboflow (83.8%) |
+
+File kết quả chi tiết: `artifacts/detector/helmet_metrics.json`
+
+#### Biểu đồ huấn luyện
+
+Ma trận nhầm lẫn (confusion matrix):
+
+![Confusion Matrix Helmet](docs/screenshots/helmet_confusion_matrix.png)
+
+Đường cong Precision-Recall:
+
+![PR Curve Helmet](docs/screenshots/helmet_pr_curve.png)
+
+Biểu đồ F1-Confidence:
+
+![F1 Curve Helmet](docs/screenshots/helmet_f1_curve.png)
+
+#### Demo API trên Swagger UI
+
+Test endpoint `/api/detect` với ảnh người đội mũ bảo hiểm → trả về JSON có label "With Helmet", confidence 89.3%:
+
+![API Detect Helmet](docs/screenshots/api_detect_helmet.png)
+
+#### Tab Webcam trên React (mức nâng cao +2 điểm)
+
+Giao diện React có tab " Mũ bảo hiểm (Webcam)" — gọi `/api/detect` mỗi 200 ms, hiển thị FPS real-time (~5 FPS trên CPU) và hộp vẽ quanh người đội/không đội mũ bảo hiểm:
+
+![React Helmet Webcam](docs/screenshots/react_helmet_webcam.png)
+
+**Tính năng tương tác:**
+- Nút "Bắt đầu/Dừng" webcam
+- Hiển thị FPS và độ trễ (ms) theo thời gian thực
+- Bảng thống kê số lượng "With Helmet" / "Without Helmet" phát hiện được
+- Danh sách chi tiết từng đối tượng với confidence score
 ## Đo hiệu năng
 
 Chưa đo — bước C5 sẽ chạy `python scripts/benchmark.py --api <link backend>` (locust: tuần tự 1 người dùng, sau 3 lần khởi động) hoặc `hey`, rồi điền p50/p95 + RAM vào đây.
