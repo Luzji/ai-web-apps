@@ -167,6 +167,22 @@ Ma trận nhầm lẫn bản v2:
 
 ![Ma trận nhầm lẫn v2](out_v1/cm_v2.png)
 
+### Ứng dụng 2 — Phát hiện đối tượng
+
+**Baseline:** YOLO11n pretrained trên COCO (80 lớp: người, xe, động vật…).
+
+**Fine-tune:** huấn luyện thêm 20 epochs trên bộ dữ liệu mũ bảo hiểm (1.368 ảnh train, 90 ảnh test, 2 lớp: With Helmet / Without Helmet, Roboflow Universe, CC BY 4.0).
+
+| Cấu hình | Tập test | mAP50 | mAP50-95 | Precision | Recall |
+|---|---|---|---|---|---|
+| YOLO11n (COCO, 80 lớp) | COCO128 | ~0.80+ | — | — | — |
+| YOLO11n fine-tune 20 epochs (mũ bảo hiểm) | 90 ảnh | **0.797** | 0.452 | 0.833 | 0.727 |
+
+File kết quả: `artifacts/detector/helmet_metrics.json`  
+Biểu đồ huấn luyện: `artifacts/detector/runs/helmet_yolo11n/`
+
+**Mở rộng:** tab Webcam trên React gọi `/api/detect` mỗi 200 ms, hiển thị FPS real-time (~5 FPS trên CPU) và hộp vẽ quanh người đội/không đội mũ bảo hiểm.
+
 ## Công cụ AI đã sử dụng
 
 Theo yêu cầu của giảng viên, nhóm ghi rõ công cụ AI và phiên bản:
