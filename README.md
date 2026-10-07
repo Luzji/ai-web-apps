@@ -6,7 +6,7 @@ Bài tập môn học phần Lập trình Web nâng cao (N05). Một backend Fas
 |---|---|
 | Hoàng Văn Thắng | 24104731 | 
 | Nông Trung Anh | 24100427 | 
-| Trịnh Xuân Bắc| 24100043 |
+| Trịnh Xuân Bắc| 24105823 |
 ## Liên kết sản phẩm
 
 | Mục | Link |
